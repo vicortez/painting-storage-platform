@@ -8,7 +8,10 @@
       "name": "client", // A friendly name shown in the explorer
       "path": "client",
       "settings": {
-        "javascript.preferences.importModuleSpecifier": "non-relative"
+        // "javascript.preferences.importModuleSpecifier": "non-relative",
+        "files.associations": {
+          "*.css": "tailwindcss"
+        }
       }
     },
     {
@@ -18,16 +21,13 @@
   ],
   // some specific settings need to be setup here when using multi root workspaces
   "settings": {
-    "files.associations": {
-      "*.css": "tailwindcss"
-    },
     "cssModules.camelCase": true,
     "javascript.preferences.importModuleSpecifier": "non-relative",
     "prettier.semi": false,
     "prettier.singleQuote": true,
     "prettier.printWidth": 100,
     "editor.rulers": [100],
-    "eslint.workingDirectories": ["./server", "./client"],
+    // "eslint.workingDirectories": ["./server", "./client"],
     "editor.formatOnSave": true
   }
 }

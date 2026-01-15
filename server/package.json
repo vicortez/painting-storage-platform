@@ -5,9 +5,13 @@
   "license": "ISC",
   "author": "",
   "type": "module",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env NODE_ENV=development node --experimental-strip-types --watch ./src/index.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "imports": {
+    "#src/*.ts": "./src/*.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",

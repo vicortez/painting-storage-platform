@@ -12,6 +12,8 @@
     "moduleResolution": "nodenext",
     "allowImportingTsExtensions": true,
     "noEmit": true,
+    // "rewriteRelativeImportExtensions": false,
+    "esModuleInterop": true,
     // File Layout
     "rootDir": "./src",
     "outDir": "./dist",
@@ -22,7 +24,7 @@
     "target": "esnext",
     // For nodejs:
     // "lib": ["esnext"],
-    "types": ["node"],
+    // "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs

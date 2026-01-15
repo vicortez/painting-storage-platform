@@ -1,0 +1,10 @@
+{
+  "cssModules.camelCase": true,
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "prettier.semi": false,
+  "prettier.singleQuote": true,
+  "prettier.printWidth": 100,
+  "editor.rulers": [100],
+  // "eslint.workingDirectories": ["./server", "./client"],
+  "editor.formatOnSave": true
+}
