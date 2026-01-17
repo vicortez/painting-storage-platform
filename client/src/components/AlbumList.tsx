@@ -1,4 +1,4 @@
-import { albums } from '@/../../dev_assets/samples/samples'
+import { albums } from '@/samples/samples'
 import { useNavigate } from 'react-router'
 
 type Props = {

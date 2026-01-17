@@ -1,0 +1,21 @@
+{
+  "name": "painting-storage-platform",
+  "version": "1.0.0",
+  "description": "Toy project showcasing support for users to manage picture albums. A complete web app that hosts images inside albums and allows users to browse and manage their content.",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "homepage": "https://github.com/vicortez/painting-storage-platform#readme",
+  "bugs": {
+    "url": "https://github.com/vicortez/painting-storage-platform/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vicortez/painting-storage-platform.git"
+  },
+  "license": "ISC",
+  "author": "vicortez",
+  "scripts": {}
+}

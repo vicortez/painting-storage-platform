@@ -1,4 +1,4 @@
-import { albums, pictures } from '@/../../dev_assets/samples/samples'
+import { albums, pictures } from '@/samples/samples'
 import { useState } from 'react'
 import Button from './Button'
 import PictureMural from './PictureMural'

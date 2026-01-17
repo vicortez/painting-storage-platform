@@ -8,13 +8,19 @@
   "main": "index.ts",
   "scripts": {
     "dev": "cross-env NODE_ENV=development node --experimental-strip-types --watch ./src/index.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:client": "npm run build --prefix ../client && node scripts/copy-client.js",
+    "build": "npm run build:client && npm run typecheck",
+    "build2": "npm run typecheck",
+    "start": "cross-env NODE_ENV=production node --experimental-strip-types ./src/index.ts",
+    "deploy": "cd .. && fly deploy"
   },
   "imports": {
     "#src/*.ts": "./src/*.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.2",
+    "@flydotio/dockerfile": "^0.7.10",
     "@types/cookie-parser": "^1.4.10",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
@@ -31,6 +37,7 @@
     "cross-env": "^10.1.0",
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
-    "jsonwebtoken": "^9.0.3"
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.4"
   }
 }
