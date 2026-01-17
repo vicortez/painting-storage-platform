@@ -1,14 +1,14 @@
-import React from 'react'
+import AlbumList from '@/components/AlbumList'
+import Button from '@/components/Button'
 
-type Props = {}
-
-const HomePage = (props: Props) => {
+const HomePage = () => {
   return (
     <>
-      <h1>asdf</h1>
-      <h2>asdfg</h2>
-      <p>asd</p>
-      <button>asdf</button>
+      <AlbumList className={'mb-4'} />
+
+      <div className="flex justify-end">
+        <Button>Criar novo álbum</Button>
+      </div>
     </>
   )
 }

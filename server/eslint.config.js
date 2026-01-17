@@ -11,7 +11,8 @@ export default defineConfig(
   {
     languageOptions: { globals: globals.node, sourceType: 'module' },
     rules: {
-      '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': ['off', { args: 'none' }],
     },
   }
 )

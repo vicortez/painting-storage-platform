@@ -1,16 +1,38 @@
 @import 'tailwindcss';
 
-/*  */
+@theme {
+  --breakpoint-xs: 30rem;
+}
+
+/* custom TailwindCSS colors */
+@theme {
+  --color-primary: #18467f;
+  --color-primary-dark: #133a68;
+  --color-green-tis: #06b655;
+  --color-green-tis-dark: #034f25;
+  --color-green-tis-light: #e8ffeb;
+}
+
+/* for development */
+div {
+  border: dashed 1px pink;
+}
+
+/* base styles */
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  /* color-scheme: light dark; */
-  /* color: rgba(255, 255, 255, 0.87); */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+}
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  height: 100%;
 }
 
 a {
@@ -23,33 +45,7 @@ a:hover {
 }
 
 body {
-  /* margin: 0;
-  display: flex;
-  place-items: center; */
   min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #59f7da;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  height: 100%;
 }

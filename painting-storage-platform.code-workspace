@@ -11,7 +11,9 @@
         // "javascript.preferences.importModuleSpecifier": "non-relative",
         "files.associations": {
           "*.css": "tailwindcss"
-        }
+        },
+        "tailwindCSS.experimental.classRegex": [["tw`([^`]*)`", "$1"]],
+        "tailwindCSS.classAttributes": ["class", "className", "ngClass", ".*Styles"]
       }
     },
     {
