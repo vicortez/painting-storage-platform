@@ -8,8 +8,8 @@ export const createAlbum = async (createAlbumDTO: createAlbumDTO): Promise<Album
   return res.data
 }
 
-export const getAlbums = async (): Promise<AlbumDTO[]> => {
-  const res = await axios.get<AlbumDTO[]>(`${baseUrl}/`)
+export const getOwnAlbums = async (): Promise<AlbumDTO[]> => {
+  const res = await axios.get<AlbumDTO[]>(`${baseUrl}/own`)
   return res.data
 }
 

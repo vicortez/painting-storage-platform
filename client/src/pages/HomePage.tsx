@@ -2,8 +2,6 @@ import AlbumForm from '@/components/AlbumForm'
 import AlbumList from '@/components/AlbumList'
 import Button from '@/components/Button'
 import FormModal from '@/components/FormModal'
-import { getAlbums } from '@/services/api/albumApi'
-import { useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 const HomePage = () => {

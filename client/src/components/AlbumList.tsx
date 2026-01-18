@@ -1,4 +1,4 @@
-import { getAlbums } from '@/services/api/albumApi'
+import { getOwnAlbums } from '@/services/api/albumApi'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
@@ -15,7 +15,7 @@ const AlbumList = ({ className }: Props) => {
     error,
   } = useQuery({
     queryKey: ['albums'],
-    queryFn: getAlbums,
+    queryFn: getOwnAlbums,
   })
 
   const handleClickAlbum = (albumId: string) => {
