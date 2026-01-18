@@ -8,9 +8,9 @@ import jwt from 'jsonwebtoken'
 // for reference: RequestHandler<params, response, body, query>
 const authRouter = express.Router()
 
-const login: RequestHandler<never, ErrorResponseDTO | undefined, LoginRequestBody, never> = async (
+const login: RequestHandler<never, ErrorResponseDTO | void, LoginRequestBody, never> = async (
   req,
-  res
+  res,
 ) => {
   const { email, password } = req.body
 

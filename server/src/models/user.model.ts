@@ -5,22 +5,29 @@ export interface IUserDocument {
   email: string
   passwordHash: string
   name: string
+  createdAt: Date
+  updatedAt: Date
 }
 
-const userSchema = new Schema<IUserDocument>({
-  email: {
-    type: String,
-    required: [true, 'Email is required.'],
-    unique: true,
-    trim: true,
-    lowercase: true,
+const userSchema = new Schema<IUserDocument>(
+  {
+    email: {
+      type: String,
+      required: [true, 'Email is required.'],
+      unique: true,
+      trim: true,
+      lowercase: true,
+    },
+    passwordHash: {
+      type: String,
+      required: true,
+    },
+    name: String,
   },
-  passwordHash: {
-    type: String,
-    required: true,
+  {
+    timestamps: true,
   },
-  name: String,
-})
+)
 
 userSchema.set('toJSON', {
   transform: (doc, returnedObj) => {

@@ -1,17 +1,29 @@
-import { isObjectIdOrHexString, model, Schema } from 'mongoose'
+import { isObjectIdOrHexString, model, Schema, Types } from 'mongoose'
 
 export interface IAlbumDocument {
   id: string
   title: string
   description: string
   coverImageUrl?: string
+  user: Types.ObjectId
+  createdAt: Date
+  updatedAt: Date
 }
 
-const albumSchema = new Schema<IAlbumDocument>({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  coverImageUrl: { type: String, required: false },
-})
+const albumSchema = new Schema<IAlbumDocument>(
+  {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    coverImageUrl: { type: String, required: false },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+    },
+  },
+  {
+    timestamps: true,
+  },
+)
 
 albumSchema.set('toJSON', {
   transform: (doc, returnedObj) => {
@@ -24,3 +36,14 @@ albumSchema.set('toJSON', {
 })
 
 export const Album = model('Album', albumSchema)
+
+export interface createAlbumDTO {
+  title: string
+  description?: string
+}
+export interface AlbumDTO {
+  id: string
+  title: string
+  description?: string
+  coverImageUrl?: string
+}

@@ -1,5 +1,5 @@
 import { signUp } from '@/services/api/userApi'
-import { validateEmail, validateName, validatePassword } from '@/utils/validators'
+import { validateEmail, validateUserFullName, validateUserPassword } from '@/utils/validators'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
@@ -49,9 +49,9 @@ const SignUp = ({ className }: Props) => {
 
   const validateInputs = (): string[] => {
     const errors = []
-    errors.push(...validateName(name))
+    errors.push(...validateUserFullName(name))
     errors.push(...validateEmail(email))
-    errors.push(...validatePassword(password))
+    errors.push(...validateUserPassword(password))
 
     return errors
   }

@@ -31,7 +31,8 @@ const AppLayout = () => {
             </span>
             Meus álbuns de pinturas
           </div>
-          <div className="bg-blue-100 xs:bg-blue-500 sm:bg-blue-900">....</div>
+          {/* For development purposes */}
+          {/* <div className="bg-blue-100 xs:bg-blue-500 sm:bg-blue-900">....</div> */}
           <div className="flex flex-row gap-1 items-center">
             <div className="">Olá, {user.name.split(' ')[0]}</div>
             <Button variant="secondary" size="sm" className="text-xs" onClick={handleClickLogout}>

@@ -1,4 +1,4 @@
-export const validateName = (name: string): string[] => {
+export const validateUserFullName = (name: string): string[] => {
   const errors = []
   if (!name.trim() || name.trim().length < 2) {
     errors.push('Nome deve ter pelo menos 2 caracteres')
@@ -15,7 +15,7 @@ export const validateEmail = (email: string): string[] => {
   return errors
 }
 
-export const validatePassword = (password: string): string[] => {
+export const validateUserPassword = (password: string): string[] => {
   const errors = []
   if (password.trim().length < 3) {
     errors.push('Senha deve ter pelo menos 3 caracteres')

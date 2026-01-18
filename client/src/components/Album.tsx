@@ -1,5 +1,10 @@
+import type { AlbumDTO } from '@/models/album.model'
 import { albums, pictures } from '@/samples/samples'
+import { deleteAlbum } from '@/services/api/albumApi'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
+import { toast } from 'react-toastify'
 import Button from './Button'
 import PictureMural from './PictureMural'
 import PictureTable from './PictureTable'
@@ -10,12 +15,29 @@ type Props = {
 
 const Album = ({ id }: Props) => {
   const [visualizationMode, setVisualizationMode] = useState<'table' | 'mural'>('table')
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
+
+  const deleteAlbumMut = useMutation({
+    mutationFn: deleteAlbum,
+    onSuccess: () => {
+      queryClient.setQueryData<AlbumDTO[]>(['albums'], (oldData) => {
+        const updatedData = oldData || []
+        return updatedData.filter((album) => album.id != id)
+      })
+      navigate('/')
+    },
+    onError: (err) => {
+      toast.error('Error deleting album.')
+    },
+  })
+
   const handleClickPicture = (pictureId: number) => {
     console.log('Clicked picture with id:', pictureId)
   }
 
   const handleClickDeleteAlbum = () => {
-    console.log('Delete album with id:', id)
+    deleteAlbumMut.mutate(id)
   }
   const handleClickAddPictures = () => {
     console.log('Add pictures to album with id:', id)

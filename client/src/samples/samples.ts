@@ -5,25 +5,25 @@ export const albums = [
     id: 1,
     title: 'Paisagens',
     description: 'Álbum de pinturas de paisagens',
-    thumbnailUrl: undefined,
+    coverImageUrl: undefined,
   },
   {
     id: 2,
     title: 'Retratos',
     description: 'Álbum de pinturas de retratos',
-    thumbnailUrl: pic3,
+    coverImageUrl: pic3,
   },
   {
     id: 3,
     title: 'Album 3',
     description: 'Álbum de pinturas de gatos',
-    thumbnailUrl: pic2,
+    coverImageUrl: pic2,
   },
   {
     id: 4,
     title: 'Album 4',
     description: 'Álbum de pinturas abstratas',
-    thumbnailUrl: pic3,
+    coverImageUrl: pic3,
   },
 ]
 

@@ -1,4 +1,5 @@
-import { albums } from '@/samples/samples'
+import { getAlbums } from '@/services/api/albumApi'
+import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
 
 type Props = {
@@ -7,8 +8,22 @@ type Props = {
 
 const AlbumList = ({ className }: Props) => {
   const navigate = useNavigate()
-  const handleClickAlbum = (albumId: number) => {
+
+  const {
+    data: albums,
+    isFetching,
+    error,
+  } = useQuery({
+    queryKey: ['albums'],
+    queryFn: getAlbums,
+  })
+
+  const handleClickAlbum = (albumId: string) => {
     navigate(`/album/${albumId}`)
+  }
+
+  if (!albums || albums.length === 0) {
+    return <div>Nenhum album. Crie seu primeiro album!</div>
   }
   return (
     <div
@@ -24,14 +39,14 @@ const AlbumList = ({ className }: Props) => {
           onClick={() => handleClickAlbum(album.id)}
         >
           <div className="mb-4 w-full xs:w-60">
-            {album.thumbnailUrl && (
+            {album.coverImageUrl && (
               <img
-                src={album.thumbnailUrl}
+                src={album.coverImageUrl}
                 alt={album.title}
                 className="w-full h-48 xs:h-32 border border-solid rounded-sm object-cover"
               />
             )}
-            {!album.thumbnailUrl && (
+            {!album.coverImageUrl && (
               <div className="bg-gray-200 w-full h-48 xs:h-32 border border-solid rounded-sm object-cover" />
             )}
             <div className="mt-2">
