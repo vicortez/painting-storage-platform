@@ -1,13 +1,19 @@
+import Loading from '@/components/Loading'
 import { useAuth } from '@/context/authContext/authContext'
+import { getCurrentUser } from '@/services/api/userApi'
+import { useQuery } from '@tanstack/react-query'
 import { House } from 'lucide-react'
 import { Outlet, useNavigate } from 'react-router'
 import Button from '../components/Button'
-const user = { name: 'Victor' }
 
 // Instead of fixed header + footer, use flex col with dinamic height content.
 // Header and footer = fixed height.
 const AppLayout = () => {
   const navigate = useNavigate()
+  const { data: user, isFetching: loadingUser } = useQuery({
+    queryKey: ['user'],
+    queryFn: getCurrentUser,
+  })
   const { logout } = useAuth()
 
   const handleClickHome = () => {
@@ -33,12 +39,15 @@ const AppLayout = () => {
           </div>
           {/* For development purposes */}
           {/* <div className="bg-blue-100 xs:bg-blue-500 sm:bg-blue-900">....</div> */}
-          <div className="flex flex-row gap-1 items-center">
-            <div className="">Olá, {user.name.split(' ')[0]}</div>
-            <Button variant="secondary" size="sm" className="text-xs" onClick={handleClickLogout}>
-              Sair
-            </Button>
-          </div>
+          {loadingUser && <Loading />}
+          {!loadingUser && (
+            <div className="flex flex-row gap-1 items-center">
+              <div className="">Olá, {user.name.split(' ')[0]}</div>
+              <Button variant="secondary" size="sm" className="text-xs" onClick={handleClickLogout}>
+                Sair
+              </Button>
+            </div>
+          )}
         </div>
         <hr />
       </div>

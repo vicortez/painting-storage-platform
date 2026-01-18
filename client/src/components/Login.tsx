@@ -31,9 +31,7 @@ const Login = ({ className }: Props) => {
 
   useQuery({
     queryKey: ['user'],
-    queryFn: async () => {
-      return await getCurrentUser()
-    },
+    queryFn: getCurrentUser,
     enabled: isAuthenticated,
   })
 
