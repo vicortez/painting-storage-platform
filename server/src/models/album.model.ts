@@ -13,7 +13,7 @@ export interface IAlbumDocument {
 const albumSchema = new Schema<IAlbumDocument>(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, required: false },
     coverImageUrl: { type: String, required: false },
     user: {
       type: Schema.Types.ObjectId,

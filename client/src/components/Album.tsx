@@ -1,7 +1,6 @@
 import type { AlbumDTO } from '@/models/album.model'
 import type { PictureDTO } from '@/models/picture.model'
-import { albums, pictures } from '@/samples/samples'
-import { deleteAlbum } from '@/services/api/albumApi'
+import { deleteAlbum, getOwnAlbums } from '@/services/api/albumApi'
 import { deletePicture, getPicturesByAlbum } from '@/services/api/pictureApi'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -10,6 +9,7 @@ import { toast } from 'react-toastify'
 import Button from './Button'
 import FormModal from './FormModal'
 import ImageModal from './ImageModal'
+import Loading from './Loading'
 import PictureForm from './PictureForm'
 import PictureMural from './PictureMural'
 import PictureTable from './PictureTable'
@@ -27,9 +27,13 @@ const Album = ({ id }: Props) => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
 
-  const { data: pictures } = useQuery({
+  const { data: pictures, isFetching: isFetchingPictures } = useQuery({
     queryKey: ['pictures', { albumId: id }],
     queryFn: () => getPicturesByAlbum(id),
+  })
+  const { data: albums, isFetching: isFetchingAlbums } = useQuery({
+    queryKey: ['albums'],
+    queryFn: getOwnAlbums,
   })
 
   const deleteAlbumMut = useMutation({
@@ -82,12 +86,29 @@ const Album = ({ id }: Props) => {
     setShowAddPictureModal(false)
   }
 
+  if (isFetchingAlbums || isFetchingPictures || !albums) {
+    return (
+      <div className="flex flex-row justify-center items-center">
+        <Loading />
+      </div>
+    )
+  }
+  const album = albums.find((album) => album.id === id)
+
+  if (!album) {
+    return (
+      <div className="flex flex-row justify-center items-center">
+        <p>Album not found</p>
+      </div>
+    )
+  }
+
   return (
     <div className={``}>
       <div className="flex flex-col mb-3">
-        <div className="font-medium text-lg">{albums[1].title}</div>
+        <div className="font-medium text-lg">{album.title}</div>
         <div className="flex flex-col xs:flex-row xs:justify-between">
-          <div className="text-sm">{albums[1].description}</div>
+          <div className="text-sm">{album.description}</div>
           <div className="text-xs text-gray-500 mt-2 xs:mt-0 line-through">
             visualizar como: <span>Tabela</span>/<span>Miniaturas</span>
           </div>

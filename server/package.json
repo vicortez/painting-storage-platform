@@ -14,7 +14,7 @@
     "build2": "npm run typecheck",
     "start": "cross-env NODE_ENV=production node --experimental-strip-types ./src/index.ts",
     "deploy": "cd .. && fly deploy",
-    "deploy:complete": "npm run build && (cd .. && fly deploy)"
+    "deploy:full": "npm run build && (cd .. && fly deploy)"
   },
   "imports": {
     "#src/*.ts": "./src/*.ts"
