@@ -77,6 +77,8 @@ const create: RequestHandler<
     album: albumId,
   })
   picture = await picture.save()
+  album.coverImageUrl = picture.pictureUrl
+  await album.save()
 
   res.status(201).json(picture)
 }

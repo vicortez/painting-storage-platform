@@ -18,7 +18,7 @@ const AuthProvider = ({ children }: Props) => {
   }, [])
 
   const _login = async (email: string, password: string) => {
-    await login(email, password)
+    await login({ email, password })
     setIsAuthenticated(true)
   }
   const _logout = async () => {
