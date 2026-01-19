@@ -47,7 +47,7 @@ export interface CreateUserDTO {
   name: string
 }
 export interface UserDTO {
+  id: string
   email: string
   name: string
-  id: string
 }

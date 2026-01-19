@@ -62,6 +62,7 @@ const AlbumForm = ({ formId, onSubmitted }: Props) => {
 
     return errors
   }
+
   return (
     <div className="">
       <h1 className="mb-5 text-lg font-medium">Criar novo álbum</h1>

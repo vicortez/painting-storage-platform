@@ -1,10 +1,10 @@
-import { IS_AUTHENTICATED_KEY } from '@/utils/constants'
-import axios from 'axios'
+import client from '@/lib/client'
+import { IS_AUTHENTICATED_KEY } from '@/models/constants'
 
 const baseUrl = '/api/auth'
 
-export const login = async (email: string, password: string) => {
-  await axios.post(`${baseUrl}/login`, { email, password })
+export const login = async ({ email, password }: { email: string; password: string }) => {
+  await client.post(`${baseUrl}/login`, { email, password })
   localStorage.setItem(IS_AUTHENTICATED_KEY, 'true')
 }
 

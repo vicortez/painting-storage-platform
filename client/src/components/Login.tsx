@@ -1,5 +1,6 @@
 import { useAuth } from '@/context/authContext/authContext'
-import { useQuery } from '@tanstack/react-query'
+import { login } from '@/services/api/authApi'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
@@ -26,8 +27,22 @@ type Props = {
 
 const Login = ({ className }: Props) => {
   const navigate = useNavigate()
-  const { login } = useAuth()
+  const { registerLogin } = useAuth()
   const { isAuthenticated } = useAuth()
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onSuccess: async () => {
+      toast.success('Login realizado com sucesso!', {
+        autoClose: 2000,
+      })
+      registerLogin()
+      navigate('/')
+    },
+    onError: () => {
+      toast.error('Erro ao realizar login.')
+    },
+  })
 
   useQuery({
     queryKey: ['user'],
@@ -45,14 +60,7 @@ const Login = ({ className }: Props) => {
       errors.forEach((error) => toast.error(error))
       return
     }
-
-    try {
-      await login(email, password)
-      toast.success('Login realizado com sucesso!')
-      navigate('/')
-    } catch (error) {
-      toast.error('Erro ao realizar login.')
-    }
+    loginMutation.mutate({ email, password })
   }
 
   const validateInputs = (): string[] => {

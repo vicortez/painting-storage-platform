@@ -22,3 +22,16 @@ export const validateUserPassword = (password: string): string[] => {
   }
   return errors
 }
+
+export const validateDateStr = (date: string) => {
+  const errors = []
+  if (!isValidDate) {
+    errors.push('Data inválida')
+  }
+  return errors
+}
+
+function isValidDate(dateString: string) {
+  const dateObject = new Date(dateString)
+  return !isNaN(dateObject.valueOf())
+}

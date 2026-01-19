@@ -1,7 +1,8 @@
+import type { PictureDTO } from '@/models/picture.model'
+
 type Props = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  pictures: any[]
-  onClickPicture: (pictureId: number) => void
+  pictures: PictureDTO[]
+  onClickPicture: (picture: PictureDTO) => void
 }
 
 const getFormattedSize = (sizeBytes: number) => {
@@ -36,16 +37,16 @@ const PictureTable = ({ pictures, onClickPicture }: Props) => {
               <tr
                 key={picture.id}
                 className="border-b border-gray-300 last:border-b-0 hover:bg-gray-100 cursor-pointer"
-                onClick={() => onClickPicture(picture.id)}
+                onClick={() => onClickPicture(picture)}
               >
                 <td className="p-3 border-r border-gray-300 text-gray-800 font-medium">
-                  <span className="block truncate">{picture.fileName}</span>
+                  <span className="block truncate">{picture.originalFileName}</span>
                 </td>
                 <td className="p-3 border-r border-gray-300 text-gray-800">
                   {getFormattedSize(picture.sizeBytes)}
                 </td>
                 <td className="p-3 border-r border-gray-300 text-gray-800">
-                  {picture.aquisitionDate}
+                  {picture.aquisitionDate.toLocaleString()}
                 </td>
                 <td className="p-3 font-semibold" style={{ color: picture.predominantColor }}>
                   {picture.predominantColor}
@@ -55,10 +56,6 @@ const PictureTable = ({ pictures, onClickPicture }: Props) => {
           </tbody>
         </table>
       )}
-      {!pictures ||
-        (pictures.length === 0 && (
-          <div className="p-4 text-gray-600">Nenhuma foto encontrada.</div>
-        ))}
     </div>
   )
 }

@@ -1,11 +1,16 @@
 import type { AlbumDTO } from '@/models/album.model'
+import type { PictureDTO } from '@/models/picture.model'
 import { albums, pictures } from '@/samples/samples'
 import { deleteAlbum } from '@/services/api/albumApi'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { deletePicture, getPicturesByAlbum } from '@/services/api/pictureApi'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import Button from './Button'
+import FormModal from './FormModal'
+import ImageModal from './ImageModal'
+import PictureForm from './PictureForm'
 import PictureMural from './PictureMural'
 import PictureTable from './PictureTable'
 
@@ -15,15 +20,24 @@ type Props = {
 
 const Album = ({ id }: Props) => {
   const [visualizationMode, setVisualizationMode] = useState<'table' | 'mural'>('table')
+  const [showAddPictureModal, setShowAddPictureModal] = useState(false)
+  const [showImageModal, setShowImageModal] = useState(false)
+  const [selectedPicture, setSelectedPicture] = useState<PictureDTO | null>(null)
+
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+
+  const { data: pictures } = useQuery({
+    queryKey: ['pictures', { albumId: id }],
+    queryFn: () => getPicturesByAlbum(id),
+  })
 
   const deleteAlbumMut = useMutation({
     mutationFn: deleteAlbum,
     onSuccess: () => {
       queryClient.setQueryData<AlbumDTO[]>(['albums'], (oldData) => {
         const updatedData = oldData || []
-        return updatedData.filter((album) => album.id != id)
+        return updatedData.filter((album) => album.id !== id)
       })
       navigate('/')
     },
@@ -32,15 +46,40 @@ const Album = ({ id }: Props) => {
     },
   })
 
-  const handleClickPicture = (pictureId: number) => {
-    console.log('Clicked picture with id:', pictureId)
+  const deletePictureMut = useMutation({
+    mutationFn: deletePicture,
+    onSuccess: (data, pictureId) => {
+      queryClient.setQueryData<PictureDTO[]>(['pictures', { albumId: id }], (oldData) => {
+        const data = oldData || []
+        return data.filter((picture) => picture.id !== pictureId)
+      })
+      setShowImageModal(false)
+      setSelectedPicture(null)
+    },
+    onError: (err) => {
+      toast.error('Error deleting picture.')
+    },
+  })
+
+  const handleClickDeletePicture = (pictureId: string) => {
+    deletePictureMut.mutate(pictureId)
+  }
+
+  const handleClickPicture = (picture: PictureDTO) => {
+    setShowImageModal(true)
+    setSelectedPicture(picture)
   }
 
   const handleClickDeleteAlbum = () => {
     deleteAlbumMut.mutate(id)
   }
+
   const handleClickAddPictures = () => {
-    console.log('Add pictures to album with id:', id)
+    setShowAddPictureModal(true)
+  }
+
+  const onPictureSubmitted = async () => {
+    setShowAddPictureModal(false)
   }
 
   return (
@@ -55,12 +94,16 @@ const Album = ({ id }: Props) => {
         </div>
       </div>
       <div>
-        {visualizationMode === 'table' && (
+        {!pictures ||
+          (pictures.length === 0 && (
+            <div className="p-4 text-gray-600">Nenhuma foto encontrada.</div>
+          ))}
+        {pictures && pictures.length > 0 && visualizationMode === 'table' && (
           <div className="flex justify-center">
             <PictureTable pictures={pictures} onClickPicture={handleClickPicture} />
           </div>
         )}
-        {visualizationMode === 'mural' && (
+        {pictures && pictures.length > 0 && visualizationMode === 'mural' && (
           <div>
             <PictureMural pictures={pictures} />
           </div>
@@ -72,6 +115,19 @@ const Album = ({ id }: Props) => {
         </Button>
         <Button onClick={handleClickAddPictures}>Adicionar fotos</Button>
       </div>
+      <FormModal
+        isOpen={showAddPictureModal}
+        formId="add-picture-form"
+        onCancel={() => setShowAddPictureModal(false)}
+      >
+        <PictureForm formId="add-picture-form" onSubmitted={onPictureSubmitted} albumId={id} />
+      </FormModal>
+      <ImageModal
+        isOpen={showImageModal && !!selectedPicture}
+        picture={selectedPicture!}
+        onClose={() => setShowImageModal(false)}
+        onDeletePicture={handleClickDeletePicture}
+      />
     </div>
   )
 }

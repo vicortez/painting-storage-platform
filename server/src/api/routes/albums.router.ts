@@ -1,7 +1,6 @@
+import { compareIds } from '#src/lib/security_utils.ts'
 import { Album, type AlbumDTO, type createAlbumDTO } from '#src/models/album.model.ts'
 import type { ErrorResponseDTO } from '#src/models/auth.model.ts'
-import { User, type IUserDocument } from '#src/models/user.model.ts'
-import { compareIds } from '#src/utils/security_utils.ts'
 import express, { type RequestHandler } from 'express'
 
 // for reference: RequestHandler<params, response, body, query>
@@ -9,19 +8,9 @@ import express, { type RequestHandler } from 'express'
 const albumsRouter = express.Router()
 
 const getOwn: RequestHandler<never, AlbumDTO[], never, never> = async (req, res) => {
-  // TODO hardcoded for now. Will come from req.user
-  const user = {
-    _id: '696aed0733aac1d08ccbfbcb',
-  }
-  const userId = user._id
+  const { id: userId } = req.user!
   const albums = await Album.find({ user: userId }).exec()
-
   res.send(albums)
-}
-
-const getById: RequestHandler<never, null, never, never> = async (req, res) => {
-  console.log('TODO')
-  res.send(null)
 }
 
 const create: RequestHandler<never, ErrorResponseDTO | AlbumDTO, createAlbumDTO, never> = async (
@@ -29,8 +18,7 @@ const create: RequestHandler<never, ErrorResponseDTO | AlbumDTO, createAlbumDTO,
   res,
 ) => {
   const { title, description } = req.body
-  // TODO req.user
-  const user: IUserDocument = (await User.findById('696aed0733aac1d08ccbfbcb')) as IUserDocument
+  const user = req.user!
 
   if (!title || title.trim().length === 0) {
     res.status(400).json({ error: 'Title is required' })
@@ -48,14 +36,11 @@ const deleteById: RequestHandler<{ id: string }, ErrorResponseDTO | void, never,
   res,
 ) => {
   const id = req.params.id
-  // TODO from req!
-  const user = {
-    _id: '696aed0733aac1d08ccbfbcb',
-  }
+  const user = req.user!
 
   const album = await Album.findById(id)
   if (album) {
-    if (!compareIds(user._id, album.user)) {
+    if (!compareIds(user.id, album.user)) {
       res.status(401).json({ error: 'user does not have permission for that action' })
       return
     }
@@ -66,7 +51,6 @@ const deleteById: RequestHandler<{ id: string }, ErrorResponseDTO | void, never,
 }
 
 albumsRouter.get('/own', getOwn)
-albumsRouter.get('/:id', getById)
 albumsRouter.post('/', create)
 albumsRouter.delete('/:id', deleteById)
 

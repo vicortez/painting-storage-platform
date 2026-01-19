@@ -24,7 +24,7 @@ const FormModal = ({
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-0 xs:p-8">
       <div className="w-full max-h-[90vh] xs:w-dvw max-w-3xl bg-white rounded-sm shadow-xl overflow-hidden p-5">
         {children}
-        <div className="flex justify-between gap-2 p-4 border-t">
+        <div className="flex justify-between gap-2 p-4 mt-2">
           <Button onClick={onCancel} variant="secondary">
             {cancelText}
           </Button>

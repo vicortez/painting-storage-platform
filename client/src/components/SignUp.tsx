@@ -1,5 +1,5 @@
+import { validateEmail, validateUserFullName, validateUserPassword } from '@/lib/validators'
 import { signUp } from '@/services/api/userApi'
-import { validateEmail, validateUserFullName, validateUserPassword } from '@/utils/validators'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'

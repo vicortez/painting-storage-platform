@@ -26,9 +26,13 @@ const AuthProvider = ({ children }: Props) => {
     setIsAuthenticated(false)
   }
 
+  const registerLogin = () => {
+    setIsAuthenticated(true)
+  }
+
   const authContextValue = useMemo(
-    () => ({ isAuthenticated: _isAuthenticated, login: _login, logout: _logout }),
-    [_isAuthenticated]
+    () => ({ isAuthenticated: _isAuthenticated, login: _login, logout: _logout, registerLogin }),
+    [_isAuthenticated],
   )
 
   return <AuthContext.Provider value={authContextValue}>{children}</AuthContext.Provider>

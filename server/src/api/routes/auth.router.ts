@@ -1,6 +1,7 @@
 import { JWT_SIGNING_SECRET } from '#src/config/config.ts'
 import type { ErrorResponseDTO, LoginRequestBody } from '#src/models/auth.model.ts'
-import { User } from '#src/models/user.model.ts'
+import { AUTH_TOKEN_COOKIE_KEY } from '#src/models/constants.ts'
+import { User, type UserDTO } from '#src/models/user.model.ts'
 import bcrypt from 'bcrypt'
 import express, { type RequestHandler } from 'express'
 import jwt from 'jsonwebtoken'
@@ -26,14 +27,23 @@ const login: RequestHandler<never, ErrorResponseDTO | void, LoginRequestBody, ne
     return
   }
 
-  const payload = {
-    sub: user._id,
+  const payload: UserDTO = {
+    id: user.id,
     email: user.email,
+    name: user.name,
   }
 
-  const expirySeconds = 7 * 24 * 60 * 60
+  const expirySeconds = 7 * 24 * 60 * 60 // 7 days
   const token = jwt.sign(payload, JWT_SIGNING_SECRET, {
     expiresIn: expirySeconds,
+  })
+
+  res.cookie(AUTH_TOKEN_COOKIE_KEY, token, {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    path: '/',
+    secure: true,
+    httpOnly: true,
+    sameSite: 'lax',
   })
 
   res.end()
