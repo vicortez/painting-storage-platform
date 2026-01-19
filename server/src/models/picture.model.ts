@@ -18,7 +18,7 @@ export interface IPictureDocument {
 const pictureSchema = new Schema<IPictureDocument>(
   {
     title: { type: String, required: true },
-    description: { type: String, required: true },
+    description: { type: String, required: false },
     pictureUrl: { type: String, required: true },
     aquisitionDate: { type: Date, required: true },
     predominantColor: { type: String, required: false },
