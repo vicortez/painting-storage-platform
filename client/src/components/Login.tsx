@@ -1,11 +1,12 @@
 import { useAuth } from '@/context/authContext/authContext'
 import { login } from '@/services/api/authApi'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
 import { toast } from 'react-toastify'
 import { getCurrentUser } from '../services/api/userApi'
 import Button from './Button'
+import Loading from './Loading'
 
 const inputClasses = `
     w-full 
@@ -28,7 +29,7 @@ type Props = {
 const Login = ({ className }: Props) => {
   const navigate = useNavigate()
   const { registerLogin } = useAuth()
-  const { isAuthenticated } = useAuth()
+  const queryClient = useQueryClient()
 
   const loginMutation = useMutation({
     mutationFn: login,
@@ -37,17 +38,16 @@ const Login = ({ className }: Props) => {
         autoClose: 2000,
       })
       registerLogin()
+      // proactively fetch user to heat up the cache
+      queryClient.fetchQuery({
+        queryKey: ['user'],
+        queryFn: getCurrentUser,
+      })
       navigate('/')
     },
     onError: () => {
       toast.error('Erro ao realizar login.')
     },
-  })
-
-  useQuery({
-    queryKey: ['user'],
-    queryFn: getCurrentUser,
-    enabled: isAuthenticated,
   })
 
   const [email, setEmail] = useState('')
@@ -79,6 +79,11 @@ const Login = ({ className }: Props) => {
     navigate('/signup')
   }
 
+  const fillDemoCredentials = () => {
+    setEmail('exemplo@gmail.com')
+    setPassword('123')
+  }
+
   return (
     <div
       className={`${className} border border-solid! border-black! bg-green-tis-light rounded-sm
@@ -87,37 +92,50 @@ const Login = ({ className }: Props) => {
       <div className="flex items-center justify-center bg-green-tis-dark text-white xs:py-3 px-6 w-full">
         <h1 className="font-medium text-xl p-4">Meus álbums de pinturas</h1>
       </div>
-      <div className="w-full p-6">
-        <form onSubmit={handleSubmitLogin}>
-          <div className="flex flex-col gap-3 justify-center items-center mb-4">
-            <div className="mb-0.5 text-sm">Autentique-se</div>
-            <input
-              type="email"
-              name="email"
-              placeholder="E-mail"
-              className={inputClasses}
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="on"
-            />
-            <input
-              type="password"
-              placeholder="Senha"
-              className={inputClasses}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <div className="flex flex-row justify-between w-full">
-              <Button type="button" variant="secondary" onClick={handleClickSignup} size="lg">
-                Cadastre-se
-              </Button>
-              <Button type="submit" size="lg">
-                Entrar
-              </Button>
+      {loginMutation.isPending && (
+        <div className="flex flex-col justify-center items-center p-10">
+          <Loading />
+        </div>
+      )}
+      {!loginMutation.isPending && (
+        <div className="w-full p-6">
+          <form onSubmit={handleSubmitLogin}>
+            <div className="flex flex-col gap-3 justify-center items-center mb-4">
+              <div className="mb-0.5 text-sm">Autentique-se</div>
+              <input
+                type="email"
+                name="email"
+                placeholder="E-mail"
+                className={inputClasses}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="on"
+              />
+              <input
+                type="password"
+                placeholder="Senha"
+                className={inputClasses}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <div
+                className="flex flex-row justify-center text-sm underline hover:cursor-pointer"
+                onClick={fillDemoCredentials}
+              >
+                <span>Auto-preencher com credenciais demo</span>
+              </div>
+              <div className="flex flex-row justify-between w-full">
+                <Button type="button" variant="secondary" onClick={handleClickSignup} size="lg">
+                  Cadastre-se
+                </Button>
+                <Button type="submit" size="lg">
+                  Entrar
+                </Button>
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
+          </form>
+        </div>
+      )}
     </div>
   )
 }

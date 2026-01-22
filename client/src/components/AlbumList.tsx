@@ -1,6 +1,7 @@
 import { getOwnAlbums } from '@/services/api/albumApi'
 import { useQuery } from '@tanstack/react-query'
 import { useNavigate } from 'react-router'
+import Loading from './Loading'
 
 type Props = {
   className?: string
@@ -20,6 +21,14 @@ const AlbumList = ({ className }: Props) => {
 
   const handleClickAlbum = (albumId: string) => {
     navigate(`/album/${albumId}`)
+  }
+
+  if (isFetching) {
+    return (
+      <div className="flex flex-row justify-center items-center">
+        <Loading />
+      </div>
+    )
   }
 
   if (!albums || albums.length === 0) {

@@ -31,9 +31,10 @@ const Album = ({ id }: Props) => {
     queryKey: ['pictures', { albumId: id }],
     queryFn: () => getPicturesByAlbum(id),
   })
-  const { data: albums, isFetching: isFetchingAlbums } = useQuery({
+  const { data: album, isFetching: isFetchingAlbums } = useQuery({
     queryKey: ['albums'],
     queryFn: getOwnAlbums,
+    select: (albums): AlbumDTO | undefined => albums.find((album) => album.id === id),
   })
 
   const deleteAlbumMut = useMutation({
@@ -86,14 +87,13 @@ const Album = ({ id }: Props) => {
     setShowAddPictureModal(false)
   }
 
-  if (isFetchingAlbums || isFetchingPictures || !albums) {
+  if (isFetchingAlbums || isFetchingPictures) {
     return (
       <div className="flex flex-row justify-center items-center">
         <Loading />
       </div>
     )
   }
-  const album = albums.find((album) => album.id === id)
 
   if (!album) {
     return (
